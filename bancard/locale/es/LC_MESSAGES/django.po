@@ -1,0 +1,139 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-05-16 20:06+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: ANDRES GOYBURU <ANDRES@GIROLABS.COM>\n"
+"Language: Español (Spanish)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: bancard/models.py:8
+msgid "Last 4 digits"
+msgstr "Últimos 4 dígitos"
+
+#: bancard/models.py:11
+msgid "Exp. year"
+msgstr "Año de vto."
+
+#: bancard/models.py:14
+msgid "Exp. month"
+msgstr "Mes de vto."
+
+#: bancard/models.py:17
+msgid "Brand"
+msgstr "Marca"
+
+#: bancard/models.py:20
+msgid "Type"
+msgstr "Tipo"
+
+#: bancard/models.py:26 bancard/models.py:79
+msgid "User"
+msgstr "Usuario"
+
+#: bancard/models.py:31
+msgid "Is active"
+msgstr "Está activo"
+
+#: bancard/models.py:33
+msgid "Is default"
+msgstr "Es predeterminada"
+
+#: bancard/models.py:34
+msgid "Created at"
+msgstr "Creado el"
+
+#: bancard/models.py:35
+msgid "Updated at"
+msgstr "Actualizado el"
+
+#: bancard/models.py:38
+msgid "Card"
+msgstr "Tarjeta"
+
+#: bancard/models.py:39
+msgid "Cards"
+msgstr "Tarjetas"
+
+#: bancard/models.py:69 bancard/models.py:140
+msgid "Gateway response pending"
+msgstr "Pendiente de respuesta de gateway"
+
+#: bancard/models.py:70 bancard/models.py:141
+msgid "Success"
+msgstr "Exitoso"
+
+#: bancard/models.py:71 bancard/models.py:142
+msgid "Fail"
+msgstr "Fallido"
+
+#: bancard/models.py:72
+msgid "Reversed"
+msgstr "Revertido"
+
+#: bancard/models.py:88
+msgid "Payment"
+msgstr "Pago"
+
+#: bancard/models.py:93 bancard/models.py:145
+msgid "Status"
+msgstr "Estado"
+
+#: bancard/models.py:101
+msgid "Amount"
+msgstr "Monto"
+
+#: bancard/models.py:104
+msgid "User IP address"
+msgstr "Dirección IP del usuario"
+
+#: bancard/models.py:114 bancard/models.py:117 bancard/models.py:156
+msgid "Description"
+msgstr "Descripción"
+
+#: bancard/models.py:120
+msgid "Authorization code"
+msgstr "Código de autorización"
+
+#: bancard/models.py:123
+msgid "Risk Index"
+msgstr "Índice de riesgo"
+
+#: bancard/models.py:125 bancard/models.py:158
+msgid "Raw response"
+msgstr "Respuesta original"
+
+#: bancard/models.py:131 bancard/models.py:153
+msgid "Transaction"
+msgstr "Transacción"
+
+#: bancard/models.py:132
+msgid "Transactions"
+msgstr "Transacciones"
+
+#: bancard/models.py:161
+msgid "Reversion"
+msgstr "Reversión"
+
+#: bancard/models.py:162
+msgid "Reversions"
+msgstr "Reversiones"
+
+#: bancard/models.py:165
+msgid "Reversion for transaction {}."
+msgstr "Reversión para transacción {}"
+
+#: bancard/operations.py:271
+msgid "Only transactions performed on same date can be rolled back."
+msgstr ""
+"Sólo las transacciones realizadas en la misma fecha pueden server revertidas."
