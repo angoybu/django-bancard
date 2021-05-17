@@ -20,8 +20,6 @@ class Migration(migrations.Migration):
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         migrations.swappable_dependency(settings.BANCARD_PAYMENT_MODEL),
-        ("testapi", "0002_payment"),
-        ("testapi", "0001_initial"),
     ]
 
     operations = [
