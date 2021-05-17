@@ -10,8 +10,8 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ("testapi", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+        migrations.swappable_dependency(settings.BANCARD_PAYMENT_MODEL),
     ]
 
     operations = [
@@ -220,7 +220,7 @@ class Migration(migrations.Migration):
                         null=True,
                         on_delete=django.db.models.deletion.SET_NULL,
                         related_name="+",
-                        to="testapi.order",
+                        to=settings.BANCARD_PAYMENT_MODEL,
                         verbose_name="Payment",
                     ),
                 ),
