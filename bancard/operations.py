@@ -1,4 +1,5 @@
 from decimal import Decimal
+from urllib import parse
 from typing import Optional, List, Tuple, Any, Dict
 
 from django.contrib.auth import get_user_model
@@ -248,6 +249,14 @@ def init_single_buy(
         customer_ip_address=customer_ip,
         tx_description=description,
     )
+
+    # add tx_id to the return_url
+    params = {"tx_id": tx.id}
+    url_parts = list(parse.urlparse(return_url))
+    query = dict(parse.parse_qsl(url_parts[4]))
+    query.update(params)
+    url_parts[4] = parse.urlencode(query)
+    return_url = parse.urlunparse(url_parts)
     return bancard.init_single_buy(
         tx.id, amount, description, return_url, cancel_url, zimple, additional_data
     )
