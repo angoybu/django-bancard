@@ -263,12 +263,12 @@ def init_single_buy(
 
 
 def get_transaction_status(
-    payment_id: int, tx_id: Optional[int] = None
+    payment_id: Optional[int] = None, tx_id: Optional[int] = None
 ) -> Optional[ChargeResponse]:
     """Attempts to get a transaction status.
 
-    If no `tx_id` is provided, the operation will check for the last transaction
-    with `pending` status related to `payment_id`.
+    If `payment_id` is provided, the operation will check for the last transaction
+    with `pending` status.
 
     :param payment_id: ID of payment on which to check status.
     :param tx_id: ID of transaction on which to check status.
@@ -363,3 +363,12 @@ def callback(data: dict) -> Tuple[Dict[str, Any], int]:
             )
             return {"status": "success"}, 200
     return {"status": "fail"}, 400
+
+
+def transaction_exists(tx_id: int) -> bool:
+    """Checks if a transaction exists.
+
+    :param tx_id: ID of transaction to be checked.
+    :returns: True if transaction exists, False otherwise.
+    """
+    return Transaction.objects.filter(pk=tx_id).exists()
