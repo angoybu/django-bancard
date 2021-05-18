@@ -25,6 +25,7 @@ __all__ = [
     "get_transaction_status",
     "reverse",
     "callback",
+    "transaction_exists",
 ]
 
 

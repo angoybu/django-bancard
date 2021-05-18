@@ -7,7 +7,7 @@ This is a django extension that provides functionality to process payments with 
 ## Requirements
 
 - Django >= 3.2
-- Python requests
+- requests
 
 ## Configuration
 
@@ -86,9 +86,9 @@ The extension provides the following operations (parameters definitions are foun
   
     Gets a process_id to show vPOS Checkout form.
 
-- `get_transaction_status(payment_id: int, tx_id: Optional[int] = None) -> Optional[ChargeResponse]`
+- `get_transaction_status(payment_id: Optional[int] = None, tx_id: Optional[int] = None) -> Optional[ChargeResponse]`
 
-    Attempts to get a transaction status.
+    Attempts to get a transaction status. If only payment_id is sent, the operation will check for the last transaction made related to the payment_id.
 
 - `reverse(payment_id: int, tx_id: Optional[int] = None) -> bool`
 
@@ -98,7 +98,12 @@ The extension provides the following operations (parameters definitions are foun
 
     Use it only as signal subject. Processes data sent by vPOS and returns an appropriate message and status code. Sends a `transaction_updated` signal informing listeners about the transaction status.
 
+- `transaction_exists(tx_id: int) -> bool`
+
+    Checks that a transaction exists. Useful for serializer/form validation.
+
 Some operations return objects of the following classes:
+
 ```python
 @dataclass
 class BancardCard:
