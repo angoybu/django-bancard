@@ -1,5 +1,4 @@
 from decimal import Decimal
-from urllib import parse
 from typing import Optional, List, Tuple, Any, Dict
 
 from django.contrib.auth import get_user_model
@@ -25,7 +24,6 @@ __all__ = [
     "get_transaction_status",
     "reverse",
     "callback",
-    "transaction_exists",
 ]
 
 
@@ -149,11 +147,11 @@ def _update_transaction(tx: Transaction, gw_response: dict):
     tx.status = (
         Transaction.SUCCESS if gw_response.get("is_success") else Transaction.FAIL
     )
-    tx.response_description = gw_response.get("description")
-    tx.authorization_code = gw_response.get("authorization_code", "")
-    tx.risk_index = gw_response.get("risk_index", "")
-    tx.token = gw_response.get("token", "")
-    tx.raw_response = gw_response.get("raw_response", {})
+    tx.response_description = gw_response.get("description") or ""
+    tx.authorization_code = gw_response.get("authorization_code") or ""
+    tx.risk_index = gw_response.get("risk_index") or ""
+    tx.token = gw_response.get("token") or ""
+    tx.raw_response = gw_response.get("raw_response") or {}
 
 
 def _make_charge_response(tx: Transaction) -> ChargeResponse:
@@ -228,21 +226,9 @@ def init_single_buy(
     cancel_url: Optional[str] = None,
     zimple: Optional[bool] = False,
     additional_data: Optional[str] = "",
-    user_id: Optional[int] = None,
+    user_id: Optional[str] = "",
     customer_ip: Optional[str] = "",
 ) -> Optional[str]:
-    """Gets a process_id to show vPOS Checkout form.
-
-    :param payment_id: ID of payment to which the transaction will be attached.
-    :param amount: amount to be captured.
-    :param description: description of the current capture transaction.
-    :param return_url: URL to redirect the user after transaction is finished.
-    :param cancel_url: URL to redirect the user in case of transaction cancellation.
-    :param zimple: Instructs the gateway to charge a Zimple wallet.
-    :param additional_data: In case of Zimple transactions, customer's phone number goes here.
-    :param user_id: ID of user performing the transaction.
-    :param customer_ip: IP Address of visitor.
-    """
     tx = Transaction.objects.create(
         user_id=user_id,
         payment_id=payment_id,
@@ -250,26 +236,18 @@ def init_single_buy(
         customer_ip_address=customer_ip,
         tx_description=description,
     )
-
-    # add tx_id to the return_url
-    params = {"tx_id": tx.id}
-    url_parts = list(parse.urlparse(return_url))
-    query = dict(parse.parse_qsl(url_parts[4]))
-    query.update(params)
-    url_parts[4] = parse.urlencode(query)
-    return_url = parse.urlunparse(url_parts)
     return bancard.init_single_buy(
         tx.id, amount, description, return_url, cancel_url, zimple, additional_data
     )
 
 
 def get_transaction_status(
-    payment_id: Optional[int] = None, tx_id: Optional[int] = None
+    payment_id: int, tx_id: Optional[int] = None
 ) -> Optional[ChargeResponse]:
     """Attempts to get a transaction status.
 
-    If `payment_id` is provided, the operation will check for the last transaction
-    with `pending` status.
+    If no `tx_id` is provided, the operation will check for the last transaction
+    with `pending` status related to `payment_id`.
 
     :param payment_id: ID of payment on which to check status.
     :param tx_id: ID of transaction on which to check status.
@@ -364,12 +342,3 @@ def callback(data: dict) -> Tuple[Dict[str, Any], int]:
             )
             return {"status": "success"}, 200
     return {"status": "fail"}, 400
-
-
-def transaction_exists(tx_id: int) -> bool:
-    """Checks if a transaction exists.
-
-    :param tx_id: ID of transaction to be checked.
-    :returns: True if transaction exists, False otherwise.
-    """
-    return Transaction.objects.filter(pk=tx_id).exists()
