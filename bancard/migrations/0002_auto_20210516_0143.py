@@ -7,6 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
+        ("testapi", "0002_payment"),
         ("bancard", "0001_initial"),
     ]
 
@@ -16,6 +17,18 @@ class Migration(migrations.Migration):
             name="risk_index",
             field=models.CharField(
                 default="", editable=False, max_length=20, verbose_name="Risk Index"
+            ),
+        ),
+        migrations.AlterField(
+            model_name="transaction",
+            name="payment",
+            field=models.ForeignKey(
+                editable=False,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="+",
+                to="testapi.payment",
+                verbose_name="Payment",
             ),
         ),
     ]

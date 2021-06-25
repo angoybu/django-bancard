@@ -35,6 +35,7 @@ class TransactionAdmin(admin.ModelAdmin):
         "created_at",
         "updated_at",
         "token",
+        "raw_response",
     )
     list_display = ("id", "user", "amount", "status", "authorization_code")
     list_filter = ("status",)
