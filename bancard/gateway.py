@@ -1,4 +1,5 @@
 import hashlib
+from urllib.parse import urlencode, urlparse, parse_qsl, urlunparse
 from decimal import Decimal
 from typing import Optional, List, Dict, Any, Tuple
 
@@ -252,6 +253,21 @@ class BancardGateway:
         token = hashlib.sha256(
             f"{self.priv_key}{tx_id}{amount_str}PYG".encode()
         ).hexdigest()
+
+        # add tx_id to return_url and cancel_url
+        params = {"tx_id": tx_id}
+        url_parts = list(urlparse(return_url))
+        query = dict(parse_qsl(url_parts[4]))
+        query.update(params)
+        url_parts[4] = urlencode(query)
+        return_url = urlunparse(url_parts)
+        if cancel_url:
+            url_parts = list(urlparse(cancel_url))
+            query = dict(parse_qsl(url_parts[4]))
+            query.update(params)
+            url_parts[4] = urlencode(query)
+            cancel_url = urlunparse(url_parts)
+
         data = {
             "public_key": self.pub_key,
             "operation": {
