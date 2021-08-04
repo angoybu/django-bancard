@@ -26,6 +26,7 @@ class Card(models.Model):
         verbose_name=_("User"),
         editable=False,
         db_index=True,
+        null=True,
     )
     is_active = models.BooleanField(
         _("Is active"), default=False, editable=False, db_index=True

@@ -1,5 +1,6 @@
 *.pyc
 *.egg-info
+.DS_Store
 .cache/
 build/
 dist/
@@ -7,6 +8,7 @@ dist/
 .idea/
 .pytest_cache
 .tox/
+
 
 # Packages
 *.egg
@@ -26,3 +28,11 @@ develop-eggs
 .installed.cfg
 lib
 lib64
+
+# Django project files
+bancardproject/
+testapi/
+*.sqlite3
+manage.py
+Pipfile
+Pipfile.lock
