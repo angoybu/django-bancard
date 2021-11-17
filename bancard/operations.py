@@ -329,7 +329,7 @@ def callback(data: dict) -> Tuple[Dict[str, Any], int]:
     :returns: tuple with message and status for Bancard vPOS.
     """
     response = bancard.callback(data)
-    if response["is_success"]:
+    if response:
         try:
             tx = Transaction.objects.get(id=response["tx_id"])
         except Transaction.DoesNotExist:

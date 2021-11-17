@@ -334,7 +334,14 @@ class BancardGateway:
         return False, dict()
 
     def callback(self, data: dict):
-        # TODO Check that data comes from trusted source
+        private_key = settings.BANCARD_PRIVATE_KEY
+        shop_process_id = data.get("operation").get("shop_process_id")
+        amount = data.get("operation").get("amount")
+        currency = data.get("operation").get("currency")
+        string = f"{private_key}{shop_process_id}confirm{amount}{currency}"
+        token = hashlib.md5(string.encode()).hexdigest()
+        if token != data.get("operation").get("token"):
+            return
         return self._process_transaction_response(data)
 
 
