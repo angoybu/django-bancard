@@ -49,7 +49,7 @@ class BancardGateway:
         :param redirect_url: URL to redirect the user after card registration.
         """
 
-        token = hashlib.sha256(
+        token = hashlib.md5(
             f"{self.priv_key}{card_id}{user_id}request_new_card".encode()
         ).hexdigest()
         data = {
@@ -78,7 +78,7 @@ class BancardGateway:
         :param user_id: ID of the user retrieving the cards.
         """
 
-        token = hashlib.sha256(
+        token = hashlib.md5(
             f"{self.priv_key}{user_id}request_user_cards".encode()
         ).hexdigest()
         data = {"public_key": self.pub_key, "operation": {"token": token}}
@@ -126,7 +126,7 @@ class BancardGateway:
         card = self.get_user_card(user_id, card_id)
         if not card:
             return False
-        token = hashlib.sha256(
+        token = hashlib.md5(
             f"{self.priv_key}delete_card{user_id}{card['token']}".encode()
         ).hexdigest()
         data = {
@@ -204,7 +204,7 @@ class BancardGateway:
             return
         card_token = card["token"]
         amount_str = "{:.2f}".format(amount)
-        token = hashlib.sha256(
+        token = hashlib.md5(
             f"{self.priv_key}{tx_id}charge{amount_str}PYG{card_token}".encode()
         ).hexdigest()
         data = {
@@ -250,7 +250,7 @@ class BancardGateway:
         :returns: process ID to show Bancard iFrame.
         """
         amount_str = "{:.2f}".format(amount)
-        token = hashlib.sha256(
+        token = hashlib.md5(
             f"{self.priv_key}{tx_id}{amount_str}PYG".encode()
         ).hexdigest()
 
@@ -295,7 +295,7 @@ class BancardGateway:
 
         :param tx_id: ID of transaction to confirm.
         """
-        token = hashlib.sha256(
+        token = hashlib.md5(
             f"{self.priv_key}{tx_id}get_confirmation".encode()
         ).hexdigest()
         data = {
@@ -317,9 +317,7 @@ class BancardGateway:
         :param tx_id: ID of transaction on which rollback will be performed.
         :returns: Boolean indicating rollback status and vPOS response.
         """
-        token = hashlib.sha256(
-            f"{self.priv_key}{tx_id}rollback0.00".encode()
-        ).hexdigest()
+        token = hashlib.md5(f"{self.priv_key}{tx_id}rollback0.00".encode()).hexdigest()
         data = {
             "public_key": self.pub_key,
             "operation": {"token": token, "shop_process_id": tx_id},
