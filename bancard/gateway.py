@@ -5,6 +5,7 @@ from typing import Optional, List, Dict, Any, Tuple
 
 import requests
 from django.conf import settings
+from .models import Transaction
 
 
 class BancardGateway:
@@ -333,11 +334,14 @@ class BancardGateway:
 
     def callback(self, data: dict):
         shop_process_id = data.get("operation").get("shop_process_id")
+        tx = Transaction.objects.get(id=shop_process_id)
         amount = data.get("operation").get("amount")
         currency = data.get("operation").get("currency")
         string = f"{self.priv_key}{shop_process_id}confirm{amount}{currency}"
         token = hashlib.md5(string.encode()).hexdigest()
-        if token != data.get("operation").get("token"):
+        if token != data.get("operation").get("token") and tx.token != data.get(
+            "operation"
+        ).get("token"):
             return
         return self._process_transaction_response(data)
 
