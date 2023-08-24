@@ -208,7 +208,7 @@ def charge_card(
         tx_description=description,
     )
     response = bancard.charge_card(
-        user_id, card_id, tx.id, amount, description, installments
+        user_id, card_id, tx, amount, description, installments
     )
     if response:
         _update_transaction(tx, response)

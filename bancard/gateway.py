@@ -184,7 +184,7 @@ class BancardGateway:
         self,
         user_id: int,
         card_id: int,
-        tx_id: int,
+        tx: Transaction,
         amount: Decimal,
         description: str,
         installments: Optional[int] = None,
@@ -206,13 +206,15 @@ class BancardGateway:
         card_token = card["token"]
         amount_str = "{:.2f}".format(amount)
         token = hashlib.md5(
-            f"{self.priv_key}{tx_id}charge{amount_str}PYG{card_token}".encode()
+            f"{self.priv_key}{tx.id}charge{amount_str}PYG{card_token}".encode()
         ).hexdigest()
+        tx.token = token
+        tx.save()
         data = {
             "public_key": self.pub_key,
             "operation": {
                 "token": token,
-                "shop_process_id": tx_id,
+                "shop_process_id": tx.id,
                 "amount": amount_str,
                 "number_of_payments": installments or 1,
                 "currency": "PYG",
