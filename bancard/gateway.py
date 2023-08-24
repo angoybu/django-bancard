@@ -184,7 +184,7 @@ class BancardGateway:
         self,
         user_id: int,
         card_id: int,
-        tx_id: int,
+        tx: Transaction,
         amount: Decimal,
         description: str,
         installments: Optional[int] = None,
@@ -206,13 +206,15 @@ class BancardGateway:
         card_token = card["token"]
         amount_str = "{:.2f}".format(amount)
         token = hashlib.md5(
-            f"{self.priv_key}{tx_id}charge{amount_str}PYG{card_token}".encode()
+            f"{self.priv_key}{tx.id}charge{amount_str}PYG{card_token}".encode()
         ).hexdigest()
+        tx.token = token
+        tx.save()
         data = {
             "public_key": self.pub_key,
             "operation": {
                 "token": token,
-                "shop_process_id": tx_id,
+                "shop_process_id": tx.id,
                 "amount": amount_str,
                 "number_of_payments": installments or 1,
                 "currency": "PYG",
@@ -336,20 +338,14 @@ class BancardGateway:
         try:
             shop_process_id = data["operation"]["shop_process_id"]
             tx = Transaction.objects.get(id=shop_process_id)
-            amount = data["operation"]["amount"]
         except KeyError:
             return
         except Transaction.DoesNotExist:
             return
-        if tx.card:
-            card = self.get_user_card(tx.user.id, tx.card.id)
-            card_token = card["token"]
-            token = hashlib.md5(
-                f"{self.priv_key}{shop_process_id}charge{amount}PYG{card_token}".encode()
-            ).hexdigest()
-            if token != data.get("operation").get("token"):
-                return
+        if tx.card and tx.token != data.get("operation").get("token"):
+            return
         else:
+            amount = data.get("operation").get("amount")
             currency = data.get("operation").get("currency")
             string = f"{self.priv_key}{shop_process_id}confirm{amount}{currency}"
             token = hashlib.md5(string.encode()).hexdigest()
